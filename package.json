@@ -13,6 +13,8 @@
     "utils-min": "^0.1.16"
   },
   "devDependencies": {
+    "fs-extra-plus": "^0.5.18",
+    "p-spawn": "^0.5.4",
     "cmdrouter": "^0.3.1",
     "dom-native": "^0.9.9",
     "ts-node": "^8.10.2",
