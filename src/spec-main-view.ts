@@ -34,7 +34,7 @@ class SpecMainView extends BaseHTMLElement {
 			name = name.substring(1); // remove the first #
 
 			// update content
-			document.title = `Test - ${name}`;
+			document.title = `Demo - ${name.substring(5)}`; // remove the 'spec-'
 			const mainEl = first(this, 'main')!;
 			mainEl.innerHTML = '';
 			const el = append(mainEl, elem(name));
@@ -61,6 +61,7 @@ function _render(specNames: string[]) {
 	<header>
 		<h1>dom-native</h1>
 		<span></span>
+		<a class="item core" href="https://demo.dom-native.org/core/index.html">dom-native</a>
 		<a class="item draggable" href="https://demo.dom-native.org/draggable/index.html">@dom-native/draggable</a>
 		<a class="item ui" href="https://demo.dom-native.org/ui/index.html">@dom-native/ui</a>
 	</header>

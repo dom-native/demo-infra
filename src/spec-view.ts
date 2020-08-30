@@ -47,7 +47,7 @@ export abstract class SpecView extends BaseHTMLElement {
 				itemSeq++;
 				const itemEl = first(`#${itemId}`);
 				if (itemEl) {
-					const targetEl = first(itemEl, '.rootEl') ?? itemEl;
+					const targetEl = first(itemEl, '.root-el') ?? itemEl;
 					item.js?.(targetEl);
 				};
 			}
@@ -80,9 +80,9 @@ function _render(doc: CodeDoc) {
 			<div id="${itemId}" class="item ${item.css || ''}">
 				<h3>${item.title}</h3>
 				<div class="html">${item.html}</div>
-				<pre><code class="html">${escapeHtml(formatCode(item.html))}</code></pre>
-				${item.ts ? `<pre><code class="typescript">${item.ts}</code></pre>` : ''}
-				${fnBody ? `<pre><code class="javascript">${formatCode(fnBody)}</code></pre>` : ''}
+				<pre><code class="html">${escapeHtml(formatCode(item.html, 'html'))}</code></pre>
+				${item.ts ? `<pre><code class="typescript">${formatCode(item.ts, 'ts')}</code></pre>` : ''}
+				${fnBody ? `<pre><code class="javascript">${formatCode(fnBody, 'jsBody')}</code></pre>` : ''}
 			</div>`;
 		}).join('\n');
 
@@ -126,14 +126,40 @@ export function simplePull(containerEl: HTMLElement) {
 }
 
 // poor man's job code trailing space formatting
-function formatCode(codeText: string): string {
-	return codeText.split('\n').map(line => {
+function formatCode(codeText: string, type: 'html' | 'js' | 'jsBody' | 'ts'): string {
 
-		if (line.startsWith(' ')) {
-			const trimmed = line.trimLeft();
-			const diff = line.length - trimmed.length;
-			line = ' '.repeat(Math.max(diff / 3 - 2, 0)) + trimmed;
+
+	// TODO if code, needs to escape the < inside the ` ` 
+	if (type !== 'html') {
+		codeText = codeText.replace(/</g, '&lt;');
+	}
+
+
+	const lines = codeText.split('\n');
+
+	// remove first empty lines
+	if (lines.length > 0 && lines[0].trim().length == 0) {
+		lines.shift();
+	}
+
+
+
+	return lines.map(line => {
+		// sometime rollup add ..$1 to classes, variable, need to remove them
+		line = line.replace(/\$\d/g, '');
+
+		// if jsBody, then, realign the left indent
+		if (type === 'jsBody') {
+			if (line.startsWith(' ') || line.startsWith('\t')) {
+				const trimmed = line.trimLeft();
+				const diff = line.length - trimmed.length;
+				line = '  '.repeat(Math.max(diff / 3 - 2, 0)) + trimmed;
+			}
 		}
+
+
+
+		// if anything but 
 		line = line.trimRight();
 		// replace all tabs by 2 space
 		line = line.replace(/\t/g, '  ');

@@ -51,7 +51,7 @@ spec-main-view {
 		background: #777;
 		color: #fff;
 		display: grid;
-		grid-template-columns: 12rem 2rem 15rem 15rem;
+		grid-template-columns: 12rem 2rem 15rem 15rem 15rem 1fr;
 		align-items: stretch;
 		grid-gap: 1rem;
 		& > *{
@@ -72,9 +72,12 @@ spec-main-view {
 			color: #ddd;
 			font-size: 1.25rem;
 			font-weight: 200;	
+			letter-spacing: 0.01em;
 			&.sel{
 				color: #333;
 				background: rgba(255,255,255,1);
+				font-weight: 500;
+				color: var(--clr-prime);
 			}
 		}
 		
@@ -88,9 +91,11 @@ spec-main-view {
 		& > * {
 			padding: 1rem;
 			border-left: solid 4px rgba(255,255,255,0);
+			
 			&.sel{
 				background: #fff;
 				border-left: solid 4px var(--clr-prime);
+				
 			}
 		}
 	}

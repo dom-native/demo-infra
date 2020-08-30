@@ -1,6 +1,6 @@
 {
   "name": "@dom-native/demo-infra",
-  "version": "0.0.0-internal-1",
+  "version": "0.0.0-internal-2",
   "description": "Infrastructure code for dom-native demo sites (internal use)",
   "main": "dist/index.js",
   "repository": {
