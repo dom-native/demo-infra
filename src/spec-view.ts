@@ -4,15 +4,18 @@ import './init-tslib';
 
 interface CodeItem {
 	title: string,
-	jsPrefix?: string,
 	html: string,
-	ts?: string, // optional typescript code
+	tsPrefix?: string,
+	ts?: string,
+	jsPrefix?: string,
 	js?: (itemEl: HTMLElement) => void,
+	run?: (itemEl: HTMLElement) => void,
 	css?: string // optional item css classes
 }
 
 export interface CodeDoc {
 	title?: string,
+	tsPrefix?: string,
 	jsPrefix?: string,
 	groups: {
 		items: CodeItem[]
@@ -49,6 +52,7 @@ export abstract class SpecView extends BaseHTMLElement {
 				if (itemEl) {
 					const targetEl = first(itemEl, '.root-el') ?? itemEl;
 					item.js?.(targetEl);
+					item.run?.(targetEl);
 				};
 			}
 		}
@@ -65,7 +69,7 @@ function _render(doc: CodeDoc) {
 			itemSeq++;
 
 			//// Render custom item function and result
-			let fnBody: string | null = null;
+			let fnBody: string | undefined;
 			if (item.js) {
 				const fnString = item.js.toString();
 				fnBody = fnString.slice(fnString.indexOf("{") + 1, fnString.lastIndexOf("}")).trim();
@@ -76,12 +80,20 @@ function _render(doc: CodeDoc) {
 				}
 			}
 
+			let tsBody = item.ts;
+			if (tsBody) {
+				const tsPrefix = item.tsPrefix ?? doc.tsPrefix;
+				if (tsPrefix) {
+					tsBody = tsPrefix + '\n' + tsBody;
+				}
+			}
+
 			return `
 			<div id="${itemId}" class="item ${item.css || ''}">
 				<h3>${item.title}</h3>
 				<div class="html">${item.html}</div>
 				<pre><code class="html">${escapeHtml(formatCode(item.html, 'html'))}</code></pre>
-				${item.ts ? `<pre><code class="typescript">${formatCode(item.ts, 'ts')}</code></pre>` : ''}
+				${tsBody ? `<pre><code class="typescript">${formatCode(tsBody, 'ts')}</code></pre>` : ''}
 				${fnBody ? `<pre><code class="javascript">${formatCode(fnBody, 'jsBody')}</code></pre>` : ''}
 			</div>`;
 		}).join('\n');
@@ -157,10 +169,9 @@ function formatCode(codeText: string, type: 'html' | 'js' | 'jsBody' | 'ts'): st
 			}
 		}
 
-
-
 		// if anything but 
 		line = line.trimRight();
+
 		// replace all tabs by 2 space
 		line = line.replace(/\t/g, '  ');
 
@@ -168,6 +179,7 @@ function formatCode(codeText: string, type: 'html' | 'js' | 'jsBody' | 'ts'): st
 		if (line.trim() === '//') {
 			line = '';
 		}
+
 		// replace all ending // by new line (TS remove empty lines, so workaround to get too presentation)
 		else {
 			line = line.replace(/\/\/$/g, '\n');
