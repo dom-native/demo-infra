@@ -1,5 +1,5 @@
 
-export * from './runner';
-export * from './spec-main-view';
-export * from './spec-view';
+export * from './runner.js';
+export * from './spec-main-view.js';
+export * from './spec-view.js';
 

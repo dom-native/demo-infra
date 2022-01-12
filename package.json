@@ -1,6 +1,7 @@
 {
   "name": "@dom-native/demo-infra",
-  "version": "0.0.0-internal-3",
+  "type": "module",
+  "version": "0.0.0-internal-4",
   "description": "Infrastructure code for dom-native demo sites (internal use)",
   "main": "dist/index.js",
   "repository": {
@@ -9,19 +10,20 @@
   },
   "keywords": [],
   "dependencies": {
-    "tslib": "^2.0.1",
-    "utils-min": "^0.1.16"
+    "execa": "^6.0.0",
+    "tslib": "^2.3.1",
+    "utils-min": "^0.2.0"
   },
   "devDependencies": {
-    "fs-extra-plus": "^0.5.18",
-    "p-spawn": "^0.5.4",
     "cmdrouter": "^0.3.1",
-    "dom-native": "^0.9.9",
-    "ts-node": "^8.10.2",
-    "typescript": "^4.0.2"
+    "dom-native": "^0.10.0",
+    "fs-extra-plus": "^0.6.0",
+    "p-spawn": "^0.5.5",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   },
   "peerDependencies": {
-    "dom-native": "^0.9.9"
+    "dom-native": "^0.10.0"
   },
   "files": [
     "src/",
@@ -30,7 +32,7 @@
   ],
   "scripts": {
     "prepack": "npm run build",
-    "build": "TS_NODE_FILES=true ./node_modules/.bin/ts-node --project scripts/tsconfig.json  scripts/cmds.ts build"
+    "build": "TS_NODE_PROJECT='scripts/tsconfig.json' node --loader ts-node/esm ./scripts/cmds.ts build"
   },
   "engines": {
     "node": ">=8.2.0"

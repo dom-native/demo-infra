@@ -71,7 +71,7 @@ function fast_equal(a: any, b: any) {
 //#endregion ---------- /fast-deep-qual ---------- 
 
 export async function wait(ms: number) {
-	return new Promise(function (resolve) {
+	return new Promise(function (resolve: Function) {
 
 		setTimeout(() => { resolve(); }, ms);
 	})

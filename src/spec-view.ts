@@ -1,5 +1,5 @@
 import { all, BaseHTMLElement, first, on, pull } from 'dom-native';
-import './init-tslib';
+import './init-tslib.js';
 
 
 interface CodeItem {

@@ -1,15 +1,16 @@
 import { router } from 'cmdrouter';
-import * as fs from 'fs-extra-plus';
-import { spawn } from 'p-spawn';
-
+import { execa } from 'execa';
+import { saferRemove } from 'fs-extra-plus';
 
 router({ build }).route();
 
+const { stdout, stderr } = process;
+
 async function build() {
-	await fs.saferRemove('./dist');
+	await saferRemove('./dist');
 
 	// build the tsc (vdev assume rollup on webBundles, which we do not need for this build)
-	await spawn('./node_modules/.bin/tsc');
+	await execa('./node_modules/.bin/tsc', { stdout, stderr });
 }
 
 

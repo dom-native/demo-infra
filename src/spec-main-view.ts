@@ -1,6 +1,6 @@
 import { all, append, BaseHTMLElement, customElement, elem, first, onWin } from 'dom-native';
 import { split } from 'utils-min';
-import './init-tslib';
+import './init-tslib.js';
 
 
 @customElement('spec-main-view')
